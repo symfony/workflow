@@ -288,9 +288,12 @@ class Workflow
     {
         foreach ($transitions as $transition) {
             foreach ($transition->getFroms() as $place) {
-                if (!$marking->has($place)) {
-                    continue 2;
+                if ($marking->has($place)) {
+                    break;
                 }
+            }
+            if (!$marking->has($place)) {
+                continue 1;
             }
 
             if (true !== $this->guardTransition($subject, $marking, $transition)) {
