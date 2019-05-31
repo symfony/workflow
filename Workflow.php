@@ -252,12 +252,16 @@ class Workflow implements WorkflowInterface
 
     private function buildTransitionBlockerListForTransition($subject, Marking $marking, Transition $transition)
     {
+        $found = false;
         foreach ($transition->getFroms() as $place) {
-            if (!$marking->has($place)) {
-                return new TransitionBlockerList([
-                    TransitionBlocker::createBlockedByMarking($marking),
-                ]);
+            if ($marking->has($place)) {
+                $found = true;
             }
+        }
+        if(!$found){
+            return new TransitionBlockerList([
+                TransitionBlocker::createBlockedByMarking($marking),
+            ]);
         }
 
         if (null === $this->dispatcher) {
