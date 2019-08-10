@@ -411,7 +411,7 @@ class WorkflowTest extends TestCase
     public function testApplyDoesNotTriggerExtraGuardWithEventDispatcher()
     {
         $transitions[] = new Transition('a-b', 'a', 'b');
-        $transitions[] = new Transition('a-c', 'a', 'c');
+        $transitions[] = new Transition('b-c', 'b', 'c');
         $definition = new Definition(['a', 'b', 'c'], $transitions);
 
         $subject = new Subject();
