@@ -43,7 +43,7 @@ class Workflow implements WorkflowInterface
 
     public const DEFAULT_INITIAL_CONTEXT = ['initial' => true];
 
-    private const DISABLE_EVENTS_MAPPING = [
+    protected const DISABLE_EVENTS_MAPPING = [
         WorkflowEvents::LEAVE => self::DISABLE_LEAVE_EVENT,
         WorkflowEvents::TRANSITION => self::DISABLE_TRANSITION_EVENT,
         WorkflowEvents::ENTER => self::DISABLE_ENTER_EVENT,
@@ -52,10 +52,10 @@ class Workflow implements WorkflowInterface
         WorkflowEvents::ANNOUNCE => self::DISABLE_ANNOUNCE_EVENT,
     ];
 
-    private $definition;
-    private $markingStore;
-    private $dispatcher;
-    private $name;
+    protected $definition;
+    protected $markingStore;
+    protected $dispatcher;
+    protected $name;
 
     /**
      * When `null` fire all events (the default behaviour).
@@ -65,7 +65,7 @@ class Workflow implements WorkflowInterface
      *
      * @var array|string[]|null
      */
-    private $eventsToDispatch = null;
+    protected $eventsToDispatch = null;
 
     public function __construct(Definition $definition, MarkingStoreInterface $markingStore = null, EventDispatcherInterface $dispatcher = null, string $name = 'unnamed', array $eventsToDispatch = null)
     {
@@ -316,7 +316,7 @@ class Workflow implements WorkflowInterface
         return $this->definition->getMetadataStore();
     }
 
-    private function buildTransitionBlockerListForTransition(object $subject, Marking $marking, Transition $transition): TransitionBlockerList
+    protected function buildTransitionBlockerListForTransition(object $subject, Marking $marking, Transition $transition): TransitionBlockerList
     {
         foreach ($transition->getFroms() as $place) {
             if (!$marking->has($place)) {
@@ -339,7 +339,7 @@ class Workflow implements WorkflowInterface
         return new TransitionBlockerList();
     }
 
-    private function guardTransition(object $subject, Marking $marking, Transition $transition): ?GuardEvent
+    protected function guardTransition(object $subject, Marking $marking, Transition $transition): ?GuardEvent
     {
         if (null === $this->dispatcher) {
             return null;
@@ -354,7 +354,7 @@ class Workflow implements WorkflowInterface
         return $event;
     }
 
-    private function leave(object $subject, Transition $transition, Marking $marking, array $context = []): void
+    protected function leave(object $subject, Transition $transition, Marking $marking, array $context = []): void
     {
         $places = $transition->getFroms();
 
@@ -374,7 +374,7 @@ class Workflow implements WorkflowInterface
         }
     }
 
-    private function transition(object $subject, Transition $transition, Marking $marking, array $context): array
+    protected function transition(object $subject, Transition $transition, Marking $marking, array $context): array
     {
         if (!$this->shouldDispatchEvent(WorkflowEvents::TRANSITION, $context)) {
             return $context;
@@ -389,7 +389,7 @@ class Workflow implements WorkflowInterface
         return $event->getContext();
     }
 
-    private function enter(object $subject, Transition $transition, Marking $marking, array $context): void
+    protected function enter(object $subject, Transition $transition, Marking $marking, array $context): void
     {
         $places = $transition->getTos();
 
@@ -409,7 +409,7 @@ class Workflow implements WorkflowInterface
         }
     }
 
-    private function entered(object $subject, ?Transition $transition, Marking $marking, array $context): void
+    protected function entered(object $subject, ?Transition $transition, Marking $marking, array $context): void
     {
         if (!$this->shouldDispatchEvent(WorkflowEvents::ENTERED, $context)) {
             return;
@@ -425,7 +425,7 @@ class Workflow implements WorkflowInterface
         }
     }
 
-    private function completed(object $subject, Transition $transition, Marking $marking, array $context): void
+    protected function completed(object $subject, Transition $transition, Marking $marking, array $context): void
     {
         if (!$this->shouldDispatchEvent(WorkflowEvents::COMPLETED, $context)) {
             return;
@@ -438,7 +438,7 @@ class Workflow implements WorkflowInterface
         $this->dispatcher->dispatch($event, sprintf('workflow.%s.completed.%s', $this->name, $transition->getName()));
     }
 
-    private function announce(object $subject, Transition $initialTransition, Marking $marking, array $context): void
+    protected function announce(object $subject, Transition $initialTransition, Marking $marking, array $context): void
     {
         if (!$this->shouldDispatchEvent(WorkflowEvents::ANNOUNCE, $context)) {
             return;
@@ -454,7 +454,7 @@ class Workflow implements WorkflowInterface
         }
     }
 
-    private function shouldDispatchEvent(string $eventName, array $context): bool
+    protected function shouldDispatchEvent(string $eventName, array $context): bool
     {
         if (null === $this->dispatcher) {
             return false;
