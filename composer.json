@@ -1,5 +1,5 @@
 {
-    "name": "weijiajia-symfony/workflow",
+    "name": "weijiajia-symfony/workflow-updata",
     "type": "library",
     "description": "Provides tools for managing a workflow or finite state machine",
     "keywords": ["workflow", "petrinet", "place", "transition", "statemachine", "state"],
