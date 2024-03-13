@@ -25,6 +25,7 @@
     },
     "require-dev": {
         "psr/log": "^1|^2|^3",
+        "symfony/config": "^6.4|^7.0",
         "symfony/dependency-injection": "^6.4|^7.0",
         "symfony/error-handler": "^6.4|^7.0",
         "symfony/event-dispatcher": "^6.4|^7.0",
