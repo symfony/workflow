@@ -1,6 +1,11 @@
 CHANGELOG
 =========
 
+7.4
+---
+
+ * Add support for `BackedEnum` in `MethodMarkingStore`
+
 7.3
 ---
 
