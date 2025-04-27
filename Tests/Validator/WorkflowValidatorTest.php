@@ -12,7 +12,6 @@
 namespace Symfony\Component\Workflow\Tests\Validator;
 
 use PHPUnit\Framework\TestCase;
-use Symfony\Component\Workflow\Arc;
 use Symfony\Component\Workflow\Definition;
 use Symfony\Component\Workflow\Exception\InvalidDefinitionException;
 use Symfony\Component\Workflow\Tests\WorkflowBuilderTrait;
