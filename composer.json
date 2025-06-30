@@ -20,8 +20,7 @@
         }
     ],
     "require": {
-        "php": ">=8.4",
-        "symfony/deprecation-contracts": "2.5|^3"
+        "php": ">=8.4"
     },
     "require-dev": {
         "psr/log": "^1|^2|^3",
