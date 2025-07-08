@@ -101,7 +101,7 @@ final class WorkflowDataCollector extends DataCollector implements LateDataColle
             'autoSync' => false,
         ];
 
-        $compressed = zlib_encode(json_encode($payload), ZLIB_ENCODING_DEFLATE);
+        $compressed = zlib_encode(json_encode($payload), \ZLIB_ENCODING_DEFLATE);
 
         $suffix = rtrim(strtr(base64_encode($compressed), '+/', '-_'), '=');
 
