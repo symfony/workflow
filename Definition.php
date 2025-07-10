@@ -89,7 +89,7 @@ final class Definition
 
         foreach ($places as $place) {
             if (!isset($this->places[$place])) {
-                throw new LogicException(sprintf('Place "%s" cannot be the initial place as it does not exist.', $place));
+                throw new LogicException(\sprintf('Place "%s" cannot be the initial place as it does not exist.', $place));
             }
         }
 
@@ -111,13 +111,13 @@ final class Definition
 
         foreach ($transition->getFroms() as $from) {
             if (!isset($this->places[$from])) {
-                throw new LogicException(sprintf('Place "%s" referenced in transition "%s" does not exist.', $from, $name));
+                throw new LogicException(\sprintf('Place "%s" referenced in transition "%s" does not exist.', $from, $name));
             }
         }
 
         foreach ($transition->getTos() as $to) {
             if (!isset($this->places[$to])) {
-                throw new LogicException(sprintf('Place "%s" referenced in transition "%s" does not exist.', $to, $name));
+                throw new LogicException(\sprintf('Place "%s" referenced in transition "%s" does not exist.', $to, $name));
             }
         }
 
