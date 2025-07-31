@@ -11,15 +11,14 @@
 
 namespace Symfony\Component\Workflow\Tests\Attribute;
 
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\Workflow\Attribute;
 use Symfony\Component\Workflow\Exception\LogicException;
 
 class AsListenerTest extends TestCase
 {
-    /**
-     * @dataProvider provideOkTests
-     */
+    #[DataProvider('provideOkTests')]
     public function testOk(string $class, string $expectedEvent, ?string $workflow = null, ?string $node = null)
     {
         $attribute = new $class($workflow, $node);
@@ -58,9 +57,7 @@ class AsListenerTest extends TestCase
         yield [Attribute\AsTransitionListener::class, 'workflow.w.transition.n', 'w', 'n'];
     }
 
-    /**
-     * @dataProvider provideTransitionThrowException
-     */
+    #[DataProvider('provideTransitionThrowException')]
     public function testTransitionThrowException(string $class)
     {
         $this->expectException(LogicException::class);
@@ -77,9 +74,7 @@ class AsListenerTest extends TestCase
         yield [Attribute\AsTransitionListener::class, 'workflow.transition'];
     }
 
-    /**
-     * @dataProvider providePlaceThrowException
-     */
+    #[DataProvider('providePlaceThrowException')]
     public function testPlaceThrowException(string $class)
     {
         $this->expectException(LogicException::class);
