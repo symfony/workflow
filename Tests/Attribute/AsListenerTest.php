@@ -68,10 +68,10 @@ class AsListenerTest extends TestCase
 
     public static function provideTransitionThrowException(): iterable
     {
-        yield [Attribute\AsAnnounceListener::class, 'workflow.announce'];
-        yield [Attribute\AsCompletedListener::class, 'workflow.completed'];
-        yield [Attribute\AsGuardListener::class, 'workflow.guard'];
-        yield [Attribute\AsTransitionListener::class, 'workflow.transition'];
+        yield [Attribute\AsAnnounceListener::class];
+        yield [Attribute\AsCompletedListener::class];
+        yield [Attribute\AsGuardListener::class];
+        yield [Attribute\AsTransitionListener::class];
     }
 
     #[DataProvider('providePlaceThrowException')]
@@ -85,8 +85,8 @@ class AsListenerTest extends TestCase
 
     public static function providePlaceThrowException(): iterable
     {
-        yield [Attribute\AsEnteredListener::class, 'workflow.entered'];
-        yield [Attribute\AsEnterListener::class, 'workflow.enter'];
-        yield [Attribute\AsLeaveListener::class, 'workflow.leave'];
+        yield [Attribute\AsEnteredListener::class];
+        yield [Attribute\AsEnterListener::class];
+        yield [Attribute\AsLeaveListener::class];
     }
 }
