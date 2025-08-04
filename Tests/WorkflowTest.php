@@ -29,6 +29,7 @@ use Symfony\Component\Workflow\Transition;
 use Symfony\Component\Workflow\TransitionBlocker;
 use Symfony\Component\Workflow\Workflow;
 use Symfony\Component\Workflow\WorkflowEvents;
+use Symfony\Contracts\EventDispatcher\EventDispatcherInterface;
 
 class WorkflowTest extends TestCase
 {
@@ -876,7 +877,7 @@ class WorkflowTest extends TestCase
     }
 }
 
-class EventDispatcherMock implements \Symfony\Contracts\EventDispatcher\EventDispatcherInterface
+class EventDispatcherMock implements EventDispatcherInterface
 {
     public array $dispatchedEvents = [];
 
