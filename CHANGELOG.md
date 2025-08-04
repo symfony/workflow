@@ -4,6 +4,7 @@ CHANGELOG
 8.0
 ---
 
+ * Add method `getEnabledTransition()` to `WorkflowInterface`
  * Add `$nbToken` argument to `Marking::mark()` and `Marking::unmark()`
  * Remove `Event::getWorkflow()` method
 
