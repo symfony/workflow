@@ -11,6 +11,8 @@
 
 namespace Symfony\Component\Workflow\Tests;
 
+use PHPUnit\Framework\Attributes\DataProvider;
+use PHPUnit\Framework\Attributes\TestWith;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\EventDispatcher\EventDispatcher;
 use Symfony\Component\Workflow\Definition;
@@ -27,6 +29,7 @@ use Symfony\Component\Workflow\Transition;
 use Symfony\Component\Workflow\TransitionBlocker;
 use Symfony\Component\Workflow\Workflow;
 use Symfony\Component\Workflow\WorkflowEvents;
+use Symfony\Contracts\EventDispatcher\EventDispatcherInterface;
 
 class WorkflowTest extends TestCase
 {
@@ -439,9 +442,7 @@ class WorkflowTest extends TestCase
         yield [true, []];
     }
 
-    /**
-     * @dataProvider provideApplyWithEventDispatcherForAnnounceTests
-     */
+    #[DataProvider('provideApplyWithEventDispatcherForAnnounceTests')]
     public function testApplyWithEventDispatcherForAnnounce(bool $fired, array $context)
     {
         $definition = $this->createComplexWorkflowDefinition();
@@ -820,10 +821,8 @@ class WorkflowTest extends TestCase
         $this->assertSame('to_a', $transitions[2]->getName());
     }
 
-    /**
-     * @@testWith ["back1"]
-     *            ["back2"]
-     */
+    #[TestWith(['back1'])]
+    #[TestWith(['back2'])]
     public function testApplyWithSameNameBackTransition(string $transition)
     {
         $definition = $this->createWorkflowWithSameNameBackTransition();
@@ -878,7 +877,7 @@ class WorkflowTest extends TestCase
     }
 }
 
-class EventDispatcherMock implements \Symfony\Contracts\EventDispatcher\EventDispatcherInterface
+class EventDispatcherMock implements EventDispatcherInterface
 {
     public array $dispatchedEvents = [];
 
