@@ -141,10 +141,10 @@ class MermaidDumperTest extends TestCase
     {
         $builder = new DefinitionBuilder();
 
-        $builder->addPlaces(['start', 'subgraph', 'end', 'finis']);
+        $builder->addPlaces(['start', 'subgraph', 'end', 'finish']);
         $builder->addTransitions([
             new Transition('t0', ['start', 'subgraph'], ['end']),
-            new Transition('t1', ['end'], ['finis']),
+            new Transition('t1', ['end'], ['finish']),
         ]);
 
         $definition = $builder->build();
@@ -155,7 +155,7 @@ class MermaidDumperTest extends TestCase
             ."place0([\"start\"])\n"
             ."place1((\"subgraph\"))\n"
             ."place2((\"end\"))\n"
-            ."place3((\"finis\"))\n"
+            ."place3((\"finish\"))\n"
             ."transition0[\"t0\"]\n"
             ."place0-->transition0\n"
             ."transition0-->place2\n"
