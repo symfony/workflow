@@ -35,10 +35,10 @@ class StateMachineGraphvizDumperTest extends TestCase
               node [fontsize="9" fontname="Arial" color="#333333" fillcolor="lightblue" fixedsize="false" width="1"];
               edge [fontsize="9" fontname="Arial" color="#333333" arrowhead="normal" arrowsize="0.5"];
 
-              place_86f7e437faa5a7fce15d1ddcb9eaeaea377667b8 [label="a", shape=circle style="filled"];
-              place_e9d71f5ee7c92d6dc9e92ffdad17b8bd49418f98 [label="b", shape=circle];
-              place_84a516841ba77a5b4648de2cd0dfcb30ea46dbb4 [label="c", shape=circle];
-              place_3c363836cf4e16666669a25da280a1865c2d2874 [label="d", shape=circle];
+              place_86f7e437faa5a7fce15d1ddcb9eaeaea377667b8 [label=<<B>a</B>>, shape=circle style="filled"];
+              place_e9d71f5ee7c92d6dc9e92ffdad17b8bd49418f98 [label=<<B>b</B>>, shape=circle];
+              place_84a516841ba77a5b4648de2cd0dfcb30ea46dbb4 [label=<<B>c</B>>, shape=circle];
+              place_3c363836cf4e16666669a25da280a1865c2d2874 [label=<<B>d</B>>, shape=circle];
               place_86f7e437faa5a7fce15d1ddcb9eaeaea377667b8 -> place_e9d71f5ee7c92d6dc9e92ffdad17b8bd49418f98 [label="t1" style="solid"];
               place_3c363836cf4e16666669a25da280a1865c2d2874 -> place_e9d71f5ee7c92d6dc9e92ffdad17b8bd49418f98 [label="My custom transition
             label 3" style="solid" fontcolor="Grey" color="Red"];
@@ -62,10 +62,10 @@ class StateMachineGraphvizDumperTest extends TestCase
               node [fontsize="9" fontname="Arial" color="#333333" fillcolor="lightblue" fixedsize="false" width="1"];
               edge [fontsize="9" fontname="Arial" color="#333333" arrowhead="normal" arrowsize="0.5"];
 
-              place_86f7e437faa5a7fce15d1ddcb9eaeaea377667b8 [label="a", shape=circle style="filled"];
-              place_e9d71f5ee7c92d6dc9e92ffdad17b8bd49418f98 [label="b", shape=circle color="#FF0000" shape="doublecircle"];
-              place_84a516841ba77a5b4648de2cd0dfcb30ea46dbb4 [label="c", shape=circle];
-              place_3c363836cf4e16666669a25da280a1865c2d2874 [label="d", shape=circle];
+              place_86f7e437faa5a7fce15d1ddcb9eaeaea377667b8 [label=<<B>a</B>>, shape=circle style="filled"];
+              place_e9d71f5ee7c92d6dc9e92ffdad17b8bd49418f98 [label=<<B>b</B>>, shape=circle color="#FF0000" shape="doublecircle"];
+              place_84a516841ba77a5b4648de2cd0dfcb30ea46dbb4 [label=<<B>c</B>>, shape=circle];
+              place_3c363836cf4e16666669a25da280a1865c2d2874 [label=<<B>d</B>>, shape=circle];
               place_86f7e437faa5a7fce15d1ddcb9eaeaea377667b8 -> place_e9d71f5ee7c92d6dc9e92ffdad17b8bd49418f98 [label="t1" style="solid"];
               place_3c363836cf4e16666669a25da280a1865c2d2874 -> place_e9d71f5ee7c92d6dc9e92ffdad17b8bd49418f98 [label="My custom transition
             label 3" style="solid" fontcolor="Grey" color="Red"];
