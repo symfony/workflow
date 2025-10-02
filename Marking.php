@@ -18,7 +18,11 @@ namespace Symfony\Component\Workflow;
  */
 class Marking
 {
+    /**
+     * @var array<string, int<0,max>> Keys are the place names and values are the number of tokens in that place
+     */
     private array $places = [];
+
     private ?array $context = null;
 
     /**
@@ -73,6 +77,11 @@ class Marking
     public function has(string $place): bool
     {
         return isset($this->places[$place]);
+    }
+
+    public function getTokenCount(string $place): int
+    {
+        return $this->places[$place] ?? 0;
     }
 
     public function getPlaces(): array

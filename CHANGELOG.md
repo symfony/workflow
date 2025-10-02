@@ -79,6 +79,7 @@ CHANGELOG
 ---
 
  * Add support for `BackedEnum` in `MethodMarkingStore`
+ * Add support for weighted transitions
 
 7.3
 ---
