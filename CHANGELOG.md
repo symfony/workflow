@@ -80,6 +80,7 @@ CHANGELOG
 
  * Add support for `BackedEnum` in `MethodMarkingStore`
  * Add support for weighted transitions
+ * Add a command to dump a workflow definition in different formats (dot, plantuml, mermaid)
 
 7.3
 ---
