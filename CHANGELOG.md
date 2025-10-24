@@ -6,6 +6,7 @@ CHANGELOG
 
  * Add method `getEnabledTransition()` to `WorkflowInterface`
  * Add `$nbToken` argument to `Marking::mark()` and `Marking::unmark()`
+ * Add `$asArc` argument to `Transition::getFroms()` and `Transition::getTos()`
  * Remove `Event::getWorkflow()` method
 
    *Before*
