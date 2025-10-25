@@ -46,6 +46,8 @@ class Transition
     }
 
     /**
+     * @param bool $asArc
+     *
      * @return $asArc is true ? array<Arc> : array<string>
      */
     public function getFroms(/* bool $asArc = false */): array
@@ -58,6 +60,8 @@ class Transition
     }
 
     /**
+     * @param bool $asArc
+     *
      * @return $asArc is true ? array<Arc> : array<string>
      */
     public function getTos(/* bool $asArc = false */): array
