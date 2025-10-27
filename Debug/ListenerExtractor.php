@@ -23,11 +23,11 @@ use Symfony\Component\Workflow\Transition;
  *
  * @author Grégoire Pineau <lyrixx@lyrixx.info>
  */
-final readonly class ListenerExtractor
+final class ListenerExtractor
 {
     public function __construct(
-        private ?EventDispatcherInterface $dispatcher = null,
-        private ?FileLinkFormatter $fileLinkFormatter = null,
+        private readonly ?EventDispatcherInterface $dispatcher = null,
+        private readonly ?FileLinkFormatter $fileLinkFormatter = null,
     ) {
     }
 
