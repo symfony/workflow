@@ -51,7 +51,7 @@ final class MethodMarkingStore implements MarkingStoreInterface
     {
         $marking = null;
         try {
-            $marking = ($this->getters[$subject::class] ??= $this->getGetter($subject))();
+            $marking = ($this->getters[$subject::class] ??= $this->getGetter($subject))($subject);
         } catch (\Error $e) {
             $unInitializedPropertyMessage = \sprintf('Typed property %s::$%s must not be accessed before initialization', get_debug_type($subject), $this->property);
             if ($e->getMessage() !== $unInitializedPropertyMessage) {
@@ -93,8 +93,8 @@ final class MethodMarkingStore implements MarkingStoreInterface
         $method = 'get'.ucfirst($property);
 
         return match (self::getType($subject, $property, $method)) {
-            MarkingStoreMethod::METHOD => $subject->{$method}(...),
-            MarkingStoreMethod::PROPERTY => static fn () => $subject->{$property},
+            MarkingStoreMethod::METHOD => static fn ($subject) => $subject->{$method}(),
+            MarkingStoreMethod::PROPERTY => static fn ($subject) => $subject->{$property},
         };
     }
 

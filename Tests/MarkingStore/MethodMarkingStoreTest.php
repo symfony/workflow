@@ -125,6 +125,23 @@ class MethodMarkingStoreTest extends TestCase
         $markingStore->getMarking($subject);
     }
 
+    public function testGetMarkingWithSameSubjectMultipleTimes()
+    {
+        $subject1 = new Subject('first_place');
+        $subject2 = new Subject('second_place');
+        $subject3 = new Subject('third_place');
+
+        $markingStore = new MethodMarkingStore(true);
+
+        $marking1 = $markingStore->getMarking($subject1);
+        $marking2 = $markingStore->getMarking($subject2);
+        $marking3 = $markingStore->getMarking($subject3);
+
+        $this->assertSame(['first_place' => 1], $marking1->getPlaces());
+        $this->assertSame(['second_place' => 1], $marking2->getPlaces());
+        $this->assertSame(['third_place' => 1], $marking3->getPlaces());
+    }
+
     private function createValueObject(string $markingValue): object
     {
         return new class($markingValue) {
