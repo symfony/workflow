@@ -31,9 +31,9 @@ use Symfony\Component\Workflow\Marking;
  */
 final class MethodMarkingStore implements MarkingStoreInterface
 {
-    /** @var array<class-string, MarkingStoreMethod> */
+    /** @var array<class-string, \Closure(object): mixed> */
     private array $getters = [];
-    /** @var array<class-string, MarkingStoreMethod> */
+    /** @var array<class-string, \Closure(object, mixed, array)> */
     private array $setters = [];
 
     /**
@@ -84,7 +84,7 @@ final class MethodMarkingStore implements MarkingStoreInterface
             $marking = key($marking);
         }
 
-        ($this->setters[$subject::class] ??= $this->getSetter($subject))($marking, $context);
+        ($this->setters[$subject::class] ??= $this->getSetter($subject))($subject, $marking, $context);
     }
 
     private function getGetter(object $subject): callable
@@ -104,8 +104,8 @@ final class MethodMarkingStore implements MarkingStoreInterface
         $method = 'set'.ucfirst($property);
 
         return match (self::getType($subject, $property, $method, $type)) {
-            MarkingStoreMethod::METHOD => $type ? static fn ($marking, $context) => $subject->{$method}($type::from($marking), $context) : $subject->{$method}(...),
-            MarkingStoreMethod::PROPERTY => $type ? static fn ($marking) => $subject->{$property} = $type::from($marking) : static fn ($marking) => $subject->{$property} = $marking,
+            MarkingStoreMethod::METHOD => $type ? static fn ($subject, $marking, $context) => $subject->{$method}($type::from($marking), $context) : static fn ($subject, $marking, $context) => $subject->{$method}($marking, $context),
+            MarkingStoreMethod::PROPERTY => $type ? static fn ($subject, $marking) => $subject->{$property} = $type::from($marking) : static fn ($subject, $marking) => $subject->{$property} = $marking,
         };
     }
 
