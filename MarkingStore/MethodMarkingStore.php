@@ -53,8 +53,7 @@ final class MethodMarkingStore implements MarkingStoreInterface
         try {
             $marking = ($this->getGetter($subject))();
         } catch (\Error $e) {
-            $unInitializedPropertyMessage = \sprintf('Typed property %s::$%s must not be accessed before initialization', get_debug_type($subject), $this->property);
-            if ($e->getMessage() !== $unInitializedPropertyMessage) {
+            if (!str_starts_with($e->getMessage(), 'Typed property ') || !str_ends_with($e->getMessage(), '::$'.$this->property.' must not be accessed before initialization')) {
                 throw $e;
             }
         }
