@@ -125,6 +125,16 @@ class MethodMarkingStoreTest extends TestCase
         $markingStore->getMarking($subject);
     }
 
+    public function testGetMarkingWithUninitializedPropertyInheritance()
+    {
+        $subject = new ChildInheritingProperty();
+
+        $markingStore = new MethodMarkingStore(true, 'place');
+        $marking = $markingStore->getMarking($subject);
+
+        $this->assertCount(0, $marking->getPlaces());
+    }
+
     public function testGetMarkingWithSameSubjectMultipleTimes()
     {
         $subject1 = new Subject('first_place');
@@ -217,4 +227,13 @@ class MethodMarkingStoreTest extends TestCase
             }
         };
     }
+}
+
+class ParentWithProperty
+{
+    public string $place;
+}
+
+class ChildInheritingProperty extends ParentWithProperty
+{
 }
