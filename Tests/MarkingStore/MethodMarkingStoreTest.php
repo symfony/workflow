@@ -107,6 +107,16 @@ class MethodMarkingStoreTest extends TestCase
         $markingStore->getMarking($subject);
     }
 
+    public function testGetMarkingWithUninitializedPropertyInheritance()
+    {
+        $subject = new ChildInheritingProperty();
+
+        $markingStore = new MethodMarkingStore(true, 'place');
+        $marking = $markingStore->getMarking($subject);
+
+        $this->assertCount(0, $marking->getPlaces());
+    }
+
     private function createValueObject(string $markingValue): object
     {
         return new class($markingValue) {
@@ -123,4 +133,13 @@ class MethodMarkingStoreTest extends TestCase
             }
         };
     }
+}
+
+class ParentWithProperty
+{
+    public string $place;
+}
+
+class ChildInheritingProperty extends ParentWithProperty
+{
 }
