@@ -31,4 +31,10 @@ class ArcTest extends TestCase
 
         new Arc('not empty', 0);
     }
+
+    public function testConstructorWithZeroPlaceName()
+    {
+        $arc = new Arc('0', 1);
+        $this->assertEquals('0', $arc->place);
+    }
 }
