@@ -23,7 +23,7 @@ final class Arc
         if ($weight < 1) {
             throw new \InvalidArgumentException(\sprintf('The weight must be greater than 0, %d given.', $weight));
         }
-        if (!$place) {
+        if ('' === $place) {
             throw new \InvalidArgumentException('The place name cannot be empty.');
         }
     }
