@@ -125,7 +125,7 @@ class WorkflowTest extends TestCase
         $definition = $this->createComplexWorkflowDefinition();
         $subject = new Subject();
         $eventDispatcher = new EventDispatcher();
-        $eventDispatcher->addListener('workflow.workflow_name.guard.t1', function (GuardEvent $event) {
+        $eventDispatcher->addListener('workflow.workflow_name.guard.t1', static function (GuardEvent $event) {
             $event->setBlocked(true);
         });
         $workflow = new Workflow($definition, new MethodMarkingStore(), $eventDispatcher, 'workflow_name');
@@ -145,10 +145,10 @@ class WorkflowTest extends TestCase
         $workflow->apply($subject, 't1');
         $workflow->apply($subject, 't2');
 
-        $eventDispatcher->addListener('workflow.workflow_name.guard.t3', function () use (&$dispatchedEvents) {
+        $eventDispatcher->addListener('workflow.workflow_name.guard.t3', static function () use (&$dispatchedEvents) {
             $dispatchedEvents[] = 'workflow_name.guard.t3';
         });
-        $eventDispatcher->addListener('workflow.workflow_name.guard.t4', function () use (&$dispatchedEvents) {
+        $eventDispatcher->addListener('workflow.workflow_name.guard.t4', static function () use (&$dispatchedEvents) {
             $dispatchedEvents[] = 'workflow_name.guard.t4';
         });
 
@@ -229,17 +229,17 @@ class WorkflowTest extends TestCase
         $dispatcher = new EventDispatcher();
         $workflow = new Workflow($definition, new MethodMarkingStore(), $dispatcher);
 
-        $dispatcher->addListener('workflow.guard', function (GuardEvent $event) {
+        $dispatcher->addListener('workflow.guard', static function (GuardEvent $event) {
             $event->addTransitionBlocker(new TransitionBlocker('Transition blocker 1', 'blocker_1'));
             $event->addTransitionBlocker(new TransitionBlocker('Transition blocker 2', 'blocker_2'));
         });
-        $dispatcher->addListener('workflow.guard', function (GuardEvent $event) {
+        $dispatcher->addListener('workflow.guard', static function (GuardEvent $event) {
             $event->addTransitionBlocker(new TransitionBlocker('Transition blocker 3', 'blocker_3'));
         });
-        $dispatcher->addListener('workflow.guard', function (GuardEvent $event) {
+        $dispatcher->addListener('workflow.guard', static function (GuardEvent $event) {
             $event->setBlocked(true);
         });
-        $dispatcher->addListener('workflow.guard', function (GuardEvent $event) {
+        $dispatcher->addListener('workflow.guard', static function (GuardEvent $event) {
             $event->setBlocked(true, 'You should not pass !!');
         });
 
@@ -581,7 +581,7 @@ class WorkflowTest extends TestCase
         $definition = $this->createComplexWorkflowDefinition();
         $subject = new Subject();
         $eventDispatcher = new EventDispatcher();
-        $eventDispatcher->addListener('workflow.transition', function (TransitionEvent $event) {
+        $eventDispatcher->addListener('workflow.transition', static function (TransitionEvent $event) {
             $event->setContext(array_merge($event->getContext(), ['user' => 'admin']));
         });
         $workflow = new Workflow($definition, new MethodMarkingStore(), $eventDispatcher);
@@ -658,7 +658,7 @@ class WorkflowTest extends TestCase
 
         $workflow = new Workflow($definition, new MethodMarkingStore(), $dispatcher);
 
-        $dispatcher->addListener('workflow.transition', function (TransitionEvent $event) {
+        $dispatcher->addListener('workflow.transition', static function (TransitionEvent $event) {
             $event->setContext(['foo' => 'bar']);
         });
 
@@ -717,7 +717,7 @@ class WorkflowTest extends TestCase
         $workflow = new Workflow($definition, new MethodMarkingStore(), $dispatcher, $name);
 
         $calls = [];
-        $listener = function (Event $event) use (&$calls) {
+        $listener = static function (Event $event) use (&$calls) {
             $calls[] = $event;
         };
         $dispatcher->addListener("workflow.$name.entered.A", $listener);
@@ -770,7 +770,7 @@ class WorkflowTest extends TestCase
         $definition = $this->createComplexWorkflowDefinition();
         $subject = new Subject();
         $eventDispatcher = new EventDispatcher();
-        $eventDispatcher->addListener('workflow.workflow_name.guard.t1', function (GuardEvent $event) {
+        $eventDispatcher->addListener('workflow.workflow_name.guard.t1', static function (GuardEvent $event) {
             $event->setBlocked(true);
         });
         $workflow = new Workflow($definition, new MethodMarkingStore(), $eventDispatcher, 'workflow_name');

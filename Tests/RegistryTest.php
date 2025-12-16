@@ -104,7 +104,7 @@ class RegistryTest extends TestCase
     {
         $strategy = $this->createMock(WorkflowSupportStrategyInterface::class);
         $strategy->expects($this->any())->method('supports')
-            ->willReturnCallback(fn ($workflow, $subject) => $subject instanceof $supportedClassName);
+            ->willReturnCallback(static fn ($workflow, $subject) => $subject instanceof $supportedClassName);
 
         return $strategy;
     }
