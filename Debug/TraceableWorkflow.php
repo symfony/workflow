@@ -88,6 +88,11 @@ class TraceableWorkflow implements WorkflowInterface
         return $this->calls;
     }
 
+    public function reset(): void
+    {
+        $this->calls = [];
+    }
+
     private function callInner(string $method, array $args): mixed
     {
         $sMethod = $this->workflow::class.'::'.$method;

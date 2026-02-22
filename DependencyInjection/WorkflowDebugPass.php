@@ -31,7 +31,9 @@ class WorkflowDebugPass implements CompilerPassInterface
                 ->setArguments([
                     new Reference("debug.{$id}.inner"),
                     new Reference('debug.stopwatch'),
-                ]);
+                ])
+                ->addTag('kernel.reset', ['method' => 'reset'])
+            ;
         }
     }
 }
