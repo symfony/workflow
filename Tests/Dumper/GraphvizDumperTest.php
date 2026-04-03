@@ -184,7 +184,7 @@ class GraphvizDumperTest extends TestCase
 
   place_86f7e437faa5a7fce15d1ddcb9eaeaea377667b8 [label=<<B>a</B>>, shape=circle style="filled"];
   place_e9d71f5ee7c92d6dc9e92ffdad17b8bd49418f98 [label=<<B>b</B>>, shape=circle];
-  place_84a516841ba77a5b4648de2cd0dfcb30ea46dbb4 [label=<<B>c</B><BR/>bg_color: DeepSkyBlue<BR/>description: My custom place description>, shape=circle color="#FF0000" shape="doublecircle" style="filled" fillcolor="DeepSkyBlue"];
+  place_84a516841ba77a5b4648de2cd0dfcb30ea46dbb4 [label=<<B>c</B><BR/><I>My custom place description</I>>, shape=circle color="#FF0000" shape="doublecircle" style="filled" fillcolor="DeepSkyBlue"];
   transition_b6589fc6ab0dc82cf12099d1c2d40ab994e8410c [label=<<B>My custom transition label 2</B><BR/>color: Grey<BR/>arrow_color: Purple>, shape="box" regular="1"];
   transition_356a192b7913b04c54574d18c28d46e6395428ab [label=<<B>t2</B><BR/>arrow_color: Pink>, shape="box" regular="1"];
   place_86f7e437faa5a7fce15d1ddcb9eaeaea377667b8 -> transition_b6589fc6ab0dc82cf12099d1c2d40ab994e8410c [style="solid"];
@@ -315,7 +315,7 @@ class GraphvizDumperTest extends TestCase
         $dump = (new GraphvizDumper())->dump($definition, null, ['with-metadata' => true, 'label' => 'Title with <b>bold</b> & "quotes"']);
 
         $this->assertStringContainsString('<<B>A &amp; B &lt;tag&gt;</B>', $dump);
-        $this->assertStringContainsString('description: has &quot;quotes&quot; &amp; &lt;html&gt;', $dump);
+        $this->assertStringContainsString('<BR/><I>has &quot;quotes&quot; &amp; &lt;html&gt;</I>', $dump);
         $this->assertStringContainsString('<<B>Run &lt;script&gt;alert(1)&lt;/script&gt;</B>', $dump);
         $this->assertStringContainsString('note: a &gt; b &amp; c &lt; d', $dump);
         $this->assertStringContainsString('<<B>Title with &lt;b&gt;bold&lt;/b&gt; &amp; &quot;quotes&quot;</B>', $dump);
@@ -333,7 +333,7 @@ class GraphvizDumperTest extends TestCase
 
   place_86f7e437faa5a7fce15d1ddcb9eaeaea377667b8 [label=<<B>a</B>>, shape=circle style="filled"];
   place_e9d71f5ee7c92d6dc9e92ffdad17b8bd49418f98 [label=<<B>b</B>>, shape=circle];
-  place_84a516841ba77a5b4648de2cd0dfcb30ea46dbb4 [label=<<B>c</B><BR/>bg_color: DeepSkyBlue<BR/>description: My custom place description>, shape=circle style="filled" fillcolor="DeepSkyBlue"];
+  place_84a516841ba77a5b4648de2cd0dfcb30ea46dbb4 [label=<<B>c</B><BR/><I>My custom place description</I>>, shape=circle style="filled" fillcolor="DeepSkyBlue"];
   transition_b6589fc6ab0dc82cf12099d1c2d40ab994e8410c [label=<<B>My custom transition label 2</B><BR/>color: Grey<BR/>arrow_color: Purple>, shape="box" regular="1"];
   transition_356a192b7913b04c54574d18c28d46e6395428ab [label=<<B>t2</B><BR/>arrow_color: Pink>, shape="box" regular="1"];
   place_86f7e437faa5a7fce15d1ddcb9eaeaea377667b8 -> transition_b6589fc6ab0dc82cf12099d1c2d40ab994e8410c [style="solid"];
@@ -342,5 +342,35 @@ class GraphvizDumperTest extends TestCase
   transition_356a192b7913b04c54574d18c28d46e6395428ab -> place_84a516841ba77a5b4648de2cd0dfcb30ea46dbb4 [style="solid"];
 }
 ';
+    }
+
+    public function testDumpWithMetadataEdgeCases()
+    {
+        $definition = self::createWorkflowWithMetadataEdgeCases();
+        $dump = (new GraphvizDumper())->dump($definition, null, ['with-metadata' => true]);
+
+        $expected = 'digraph workflow {
+  ratio="compress" rankdir="LR"
+  node [fontsize="9" fontname="Arial" color="#333333" fillcolor="lightblue" fixedsize="false" width="1"];
+  edge [fontsize="9" fontname="Arial" color="#333333" arrowhead="normal" arrowsize="0.5"];
+
+  place_86f7e437faa5a7fce15d1ddcb9eaeaea377667b8 [label=<<B>a</B>>, shape=circle style="filled"];
+  place_e9d71f5ee7c92d6dc9e92ffdad17b8bd49418f98 [label=<<B>b</B>>, shape=circle style="filled" fillcolor="Orange"];
+  place_84a516841ba77a5b4648de2cd0dfcb30ea46dbb4 [label=<<B>c</B><BR/><I>A &lt;bold&gt; description with &quot;special&quot; chars &amp; entities</I>>, shape=circle];
+  place_3c363836cf4e16666669a25da280a1865c2d2874 [label=<<B>d</B><BR/><I>First line
+Second line</I>>, shape=circle style="filled" fillcolor="Lime"];
+  transition_b6589fc6ab0dc82cf12099d1c2d40ab994e8410c [label=<<B>t1</B>>, shape="box" regular="1"];
+  transition_356a192b7913b04c54574d18c28d46e6395428ab [label=<<B>t2</B>>, shape="box" regular="1"];
+  transition_da4b9237bacccdf19c0760cab7aec4a8359010b0 [label=<<B>t3</B><BR/><I>Transition description</I>>, shape="box" regular="1" style="filled" fillcolor="LightCoral"];
+  place_86f7e437faa5a7fce15d1ddcb9eaeaea377667b8 -> transition_b6589fc6ab0dc82cf12099d1c2d40ab994e8410c [style="solid"];
+  transition_b6589fc6ab0dc82cf12099d1c2d40ab994e8410c -> place_e9d71f5ee7c92d6dc9e92ffdad17b8bd49418f98 [style="solid"];
+  place_e9d71f5ee7c92d6dc9e92ffdad17b8bd49418f98 -> transition_356a192b7913b04c54574d18c28d46e6395428ab [style="solid"];
+  transition_356a192b7913b04c54574d18c28d46e6395428ab -> place_84a516841ba77a5b4648de2cd0dfcb30ea46dbb4 [style="solid"];
+  place_84a516841ba77a5b4648de2cd0dfcb30ea46dbb4 -> transition_da4b9237bacccdf19c0760cab7aec4a8359010b0 [style="solid"];
+  transition_da4b9237bacccdf19c0760cab7aec4a8359010b0 -> place_3c363836cf4e16666669a25da280a1865c2d2874 [style="solid"];
+}
+';
+
+        $this->assertEquals($expected, $dump);
     }
 }
