@@ -154,7 +154,7 @@ class GraphvizDumper implements DumperInterface
             }
 
             if ($withMetadata) {
-                $escapedLabel = \sprintf('<<B>%s</B>%s>', $this->escape($placeName), $this->addMetadata($place['attributes']['metadata']));
+                $escapedLabel = \sprintf('<<B>%s</B>%s>', $this->escapeHtml($placeName), $this->addMetadata($place['attributes']['metadata']));
                 // Don't include metadata in default attributes used to format the place
                 unset($place['attributes']['metadata']);
             } else {
@@ -176,7 +176,7 @@ class GraphvizDumper implements DumperInterface
 
         foreach ($transitions as $i => $place) {
             if ($withMetadata) {
-                $escapedLabel = \sprintf('<<B>%s</B>%s>', $this->escape($place['name']), $this->addMetadata($place['metadata']));
+                $escapedLabel = \sprintf('<<B>%s</B>%s>', $this->escapeHtml($place['name']), $this->addMetadata($place['metadata']));
             } else {
                 $escapedLabel = '"'.$this->escape($place['name']).'"';
             }
@@ -284,6 +284,18 @@ class GraphvizDumper implements DumperInterface
     /**
      * @internal
      */
+    protected function escapeHtml(string|bool $value): string
+    {
+        if (\is_bool($value)) {
+            return $value ? '1' : '0';
+        }
+
+        return htmlspecialchars($value, \ENT_XML1 | \ENT_QUOTES, 'UTF-8');
+    }
+
+    /**
+     * @internal
+     */
     protected function addAttributes(array $attributes): string
     {
         $code = [];
@@ -319,7 +331,7 @@ class GraphvizDumper implements DumperInterface
         }
 
         // currentLabel and metadata to handle
-        return \sprintf('<<B>%s</B>%s>', $this->escape($currentLabel), $this->addMetadata($workflowMetadata));
+        return \sprintf('<<B>%s</B>%s>', $this->escapeHtml($currentLabel), $this->addMetadata($workflowMetadata));
     }
 
     private function addOptions(array $options): string
@@ -344,10 +356,10 @@ class GraphvizDumper implements DumperInterface
 
         foreach ($metadata as $key => $value) {
             if ($skipSeparator) {
-                $code[] = \sprintf('%s: %s', $this->escape($key), $this->escape($value));
+                $code[] = \sprintf('%s: %s', $this->escapeHtml($key), $this->escapeHtml($value));
                 $skipSeparator = false;
             } else {
-                $code[] = \sprintf('%s%s: %s', '<BR/>', $this->escape($key), $this->escape($value));
+                $code[] = \sprintf('%s%s: %s', '<BR/>', $this->escapeHtml($key), $this->escapeHtml($value));
             }
         }
 
