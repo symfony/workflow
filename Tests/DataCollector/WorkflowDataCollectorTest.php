@@ -34,7 +34,7 @@ class WorkflowDataCollectorTest extends TestCase
         $workflow1 = new Workflow($this->createComplexWorkflowDefinition(), name: 'workflow1');
         $workflow2 = new Workflow($this->createSimpleWorkflowDefinition(), name: 'workflow2');
         $dispatcher = new EventDispatcher();
-        $dispatcher->addListener('workflow.workflow2.leave.a', fn () => true);
+        $dispatcher->addListener('workflow.workflow2.leave.a', static fn () => true);
         $dispatcher->addListener('workflow.workflow2.leave.a', [self::class, 'noop']);
         $dispatcher->addListener('workflow.workflow2.leave.a', [$this, 'noop']);
         $dispatcher->addListener('workflow.workflow2.leave.a', $this->noop(...));
