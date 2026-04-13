@@ -92,7 +92,7 @@ final class WorkflowDataCollector extends DataCollector implements LateDataColle
     {
         $casters = [
             ...parent::getCasters(),
-            TransitionBlocker::class => function ($v, array $a, Stub $s, $isNested) {
+            TransitionBlocker::class => static function ($v, array $a, Stub $s, $isNested) {
                 unset(
                     $a[\sprintf(Caster::PATTERN_PRIVATE, $v::class, 'code')],
                     $a[\sprintf(Caster::PATTERN_PRIVATE, $v::class, 'parameters')],
@@ -102,7 +102,7 @@ final class WorkflowDataCollector extends DataCollector implements LateDataColle
 
                 return $a;
             },
-            Marking::class => function ($v, array $a, Stub $s, $isNested) {
+            Marking::class => static function ($v, array $a, Stub $s, $isNested) {
                 $a[Caster::PREFIX_VIRTUAL.'.places'] = array_keys($v->getPlaces());
 
                 return $a;
