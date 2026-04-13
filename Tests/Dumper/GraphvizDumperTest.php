@@ -13,9 +13,12 @@ namespace Symfony\Component\Workflow\Tests\Dumper;
 
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
+use Symfony\Component\Workflow\Definition;
 use Symfony\Component\Workflow\Dumper\GraphvizDumper;
 use Symfony\Component\Workflow\Marking;
+use Symfony\Component\Workflow\Metadata\InMemoryMetadataStore;
 use Symfony\Component\Workflow\Tests\WorkflowBuilderTrait;
+use Symfony\Component\Workflow\Transition;
 
 class GraphvizDumperTest extends TestCase
 {
@@ -286,6 +289,39 @@ class GraphvizDumperTest extends TestCase
   transition_356a192b7913b04c54574d18c28d46e6395428ab -> place_84a516841ba77a5b4648de2cd0dfcb30ea46dbb4 [style="solid"];
 }
 ';
+    }
+
+    public function testDumpEscapesSpecialCharactersInHtmlLabels()
+    {
+        $transitionWithSpecialChars = new Transition('t1', 'a', 'b');
+        $transitions = [$transitionWithSpecialChars];
+
+        $placesMetadata = [
+            'a' => [
+                'label' => 'A & B <tag>',
+                'description' => 'has "quotes" & <html>',
+            ],
+        ];
+
+        $transitionsMetadata = new \SplObjectStorage();
+        $transitionsMetadata[$transitionWithSpecialChars] = [
+            'label' => 'Run <script>alert(1)</script>',
+            'note' => 'a > b & c < d',
+        ];
+
+        $store = new InMemoryMetadataStore([], $placesMetadata, $transitionsMetadata);
+        $definition = new Definition(['a', 'b'], $transitions, null, $store);
+
+        $dump = (new GraphvizDumper())->dump($definition, null, ['with-metadata' => true, 'label' => 'Title with <b>bold</b> & "quotes"']);
+
+        $this->assertStringContainsString('<<B>A &amp; B &lt;tag&gt;</B>', $dump);
+        $this->assertStringContainsString('description: has &quot;quotes&quot; &amp; &lt;html&gt;', $dump);
+        $this->assertStringContainsString('<<B>Run &lt;script&gt;alert(1)&lt;/script&gt;</B>', $dump);
+        $this->assertStringContainsString('note: a &gt; b &amp; c &lt; d', $dump);
+        $this->assertStringContainsString('<<B>Title with &lt;b&gt;bold&lt;/b&gt; &amp; &quot;quotes&quot;</B>', $dump);
+
+        $this->assertStringNotContainsString('<script>alert(1)</script>', $dump);
+        $this->assertStringNotContainsString('<tag>', $dump);
     }
 
     public static function provideSimpleWorkflowDumpWithoutMarkingWithMetadata(): string
