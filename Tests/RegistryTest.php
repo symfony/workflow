@@ -103,7 +103,7 @@ class RegistryTest extends TestCase
     {
         $strategy = $this->createStub(WorkflowSupportStrategyInterface::class);
         $strategy->method('supports')
-            ->willReturnCallback(fn ($workflow, $subject) => $subject instanceof $supportedClassName);
+            ->willReturnCallback(static fn ($workflow, $subject) => $subject instanceof $supportedClassName);
 
         return $strategy;
     }
