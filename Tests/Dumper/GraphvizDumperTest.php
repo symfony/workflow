@@ -344,6 +344,70 @@ class GraphvizDumperTest extends TestCase
 ';
     }
 
+    public function testDumpFiltersWorkflowLevelMetadata()
+    {
+        $workflowMetadata = [
+            'bg_color' => 'Pink',
+            'description' => 'Workflow description',
+            'extra' => 'value',
+        ];
+        $store = new InMemoryMetadataStore($workflowMetadata);
+        $definition = new Definition(['a', 'b'], [new Transition('t1', 'a', 'b')], null, $store);
+
+        $dump = (new GraphvizDumper())->dump($definition, null, ['with-metadata' => true]);
+
+        $this->assertStringNotContainsString('bg_color', $dump);
+        $this->assertStringContainsString('<BR/><I>Workflow description</I>', $dump);
+        $this->assertStringContainsString('extra: value', $dump);
+
+        $dump = (new GraphvizDumper())->dump($definition, null, ['with-metadata' => true, 'label' => 'Title']);
+        $this->assertStringNotContainsString('bg_color', $dump);
+        $this->assertStringContainsString('<<B>Title</B>', $dump);
+        $this->assertStringContainsString('<BR/><I>Workflow description</I>', $dump);
+    }
+
+    public function testDumpWithListenersFoldsListenersIntoTransitionMetadata()
+    {
+        $transition = new Transition('t1', 'a', 'b');
+        $definition = new Definition(['a', 'b'], [$transition]);
+
+        $listeners = [
+            'transition__0' => [
+                'workflow.wf.transition.t1' => [
+                    ['title' => 'App\\Listener\\OnTransition::__invoke()', 'file' => null],
+                ],
+                'workflow.wf.guard.t1' => [
+                    ['title' => 'GuardListener', 'file' => null, 'guardExpressions' => ['is_granted("ROLE_USER")']],
+                ],
+            ],
+        ];
+
+        $dump = (new GraphvizDumper())->dump($definition, null, ['listeners' => $listeners]);
+
+        $this->assertStringContainsString('Listener #0: App\\Listener\\OnTransition::__invoke()', $dump);
+        $this->assertStringContainsString('Listener #1: Guard: is_granted(&quot;ROLE_USER&quot;)', $dump);
+    }
+
+    public function testDumpCoercesNonStringMetadataValuesInHtmlLabels()
+    {
+        $transition = new Transition('t1', 'a', 'b');
+        $transitionsMetadata = new \SplObjectStorage();
+        $transitionsMetadata[$transition] = [
+            'count' => 42,
+            'ratio' => 1.5,
+            'tags' => ['x', 'y'],
+            'empty' => null,
+        ];
+        $store = new InMemoryMetadataStore([], [], $transitionsMetadata);
+        $definition = new Definition(['a', 'b'], [$transition], null, $store);
+
+        $dump = (new GraphvizDumper())->dump($definition, null, ['with-metadata' => true]);
+
+        $this->assertStringContainsString('count: 42', $dump);
+        $this->assertStringContainsString('ratio: 1.5', $dump);
+        $this->assertStringContainsString('tags: [&quot;x&quot;,&quot;y&quot;]', $dump);
+    }
+
     public function testDumpWithMetadataEdgeCases()
     {
         $definition = self::createWorkflowWithMetadataEdgeCases();

@@ -57,7 +57,7 @@ class GraphvizDumper implements DumperInterface
 
         return $this->startDot($options, $label)
             .$this->addPlaces($places)
-            .$this->addTransitions($transitions, $listeners)
+            .$this->addTransitions($transitions)
             .$this->addEdges($edges)
             .$this->endDot();
     }
@@ -301,13 +301,19 @@ class GraphvizDumper implements DumperInterface
     /**
      * @internal
      */
-    protected function escapeHtml(string|bool $value): string
+    protected function escapeHtml(mixed $value): string
     {
         if (\is_bool($value)) {
             return $value ? '1' : '0';
         }
+        if (null === $value) {
+            return '';
+        }
+        if (\is_array($value) || (\is_object($value) && !$value instanceof \Stringable)) {
+            $value = json_encode($value, \JSON_UNESCAPED_SLASHES | \JSON_UNESCAPED_UNICODE);
+        }
 
-        return htmlspecialchars($value, \ENT_XML1 | \ENT_QUOTES, 'UTF-8');
+        return htmlspecialchars((string) $value, \ENT_XML1 | \ENT_QUOTES, 'UTF-8');
     }
 
     /**
@@ -341,14 +347,18 @@ class GraphvizDumper implements DumperInterface
             return \sprintf('"%s"', $this->escape($currentLabel));
         }
         $workflowMetadata = $definition->getMetadataStore()->getWorkflowMetadata();
+        unset($workflowMetadata['bg_color']);
+        $description = $workflowMetadata['description'] ?? null;
+        unset($workflowMetadata['description']);
+        $description = null !== $description ? '<I>'.$this->escapeHtml($description).'</I>' : '';
 
         if ('' === $currentLabel) {
-            // Only metadata to handle
-            return \sprintf('<%s>', $this->addMetadata($workflowMetadata, false));
+            $metadata = $this->addMetadata($workflowMetadata, false);
+
+            return \sprintf('<%s%s%s>', $metadata, '' !== $metadata && '' !== $description ? '<BR/>' : '', $description);
         }
 
-        // currentLabel and metadata to handle
-        return \sprintf('<<B>%s</B>%s>', $this->escapeHtml($currentLabel), $this->addMetadata($workflowMetadata));
+        return \sprintf('<<B>%s</B>%s%s%s>', $this->escapeHtml($currentLabel), $this->addMetadata($workflowMetadata), '' !== $description ? '<BR/>' : '', $description);
     }
 
     private function addOptions(array $options): string

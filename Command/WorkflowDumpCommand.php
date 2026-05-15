@@ -52,9 +52,7 @@ class WorkflowDumpCommand extends Command
         ?EventDispatcherInterface $dispatcher = null,
     ) {
         parent::__construct();
-        if ($dispatcher) {
-            $this->listenerExtractor = new ListenerExtractor($dispatcher);
-        }
+        $this->listenerExtractor = $dispatcher ? new ListenerExtractor($dispatcher) : null;
     }
 
     protected function configure(): void
@@ -118,7 +116,7 @@ class WorkflowDumpCommand extends Command
 
         $listeners = [];
         if ($input->getOption('with-listeners')) {
-            if (!isset($this->listenerExtractor)) {
+            if (!$this->listenerExtractor) {
                 throw new InvalidArgumentException('You cannot use the "--with-listeners" option if a dispatcher is not injected in the constructor.');
             }
             $listeners = $this->listenerExtractor->extractListeners($workflowName, $definition);
